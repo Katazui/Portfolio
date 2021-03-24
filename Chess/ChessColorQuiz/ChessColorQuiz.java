@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 public class ChessColorQuiz {
    public static void main(String[] args) throws Exception {  
       //Creating Chessboard Array
@@ -86,18 +89,20 @@ public class ChessColorQuiz {
          System.out.print(chessBoard[i][0] + "-" + chessBoard[i][1] + " | ");
          lineCut++;
          lineCutTwice++;
-         if(lineCutTwice == 32) { System.out.println(""); }
          if(lineCut == 8) {
             System.out.println("");
             lineCut = 0;
          }
+         if(lineCutTwice == 32) { System.out.println(""); }
       }
-      System.out.println("");
       //Chessboard Color Quiz
       int option;
       int correct = 0;
       int numberOfQuestions = 0;
       int question;
+      int questionLimit;
+      int tempQuestion = -1; //To avoid repeated questions
+      String finalAnswerString = "";
       Random random = new Random();
       /*
       String correctSoundEffect = "/Correct.mp3";
@@ -106,55 +111,92 @@ public class ChessColorQuiz {
       InputStream incorrectInput = new FileInputStream(incorrectSoundEffect);
       */
       Scanner keyboard = new Scanner(System.in);
-      System.out.println("ALL = 1 | TOP HALF = 2 | BOTTOM HALF = 3\n");
+      System.out.println("\nQuestion Limit? INFINITY = -1\n");
+      questionLimit = keyboard.nextInt();
+      if (questionLimit == 0) { questionLimit = -1; }
+      System.out.println("\nALL = 1 | TOP HALF = 2 | BOTTOM HALF = 3\n");
       int questionType = keyboard.nextInt();
-      System.out.println("\nQuestion Limit? INFINITY <= 0\n");
-      int questionLimit = keyboard.nextInt();
+      Date date = new Date();
+      long timeStarted = date.getTime();
       do {
          if(questionLimit == numberOfQuestions) {
-            System.out.println("Keep playing chess! See ya later!");
-            System.out.println("\nScore: "+ correct + "/" + numberOfQuestions + "\n");
             break;
          }
+         //Define Question Type
          if(questionType == 1) {
              question = random.nextInt(64);
+             tempQuestion = question;
          } else if(questionType == 2) {
             question = random.nextInt(32);
+            tempQuestion = question;
          } else if(questionType == 3) {
             question = random.nextInt(32);
             question = question + 32;
+            tempQuestion = question;
          } else {
             question = random.nextInt(64);
+            tempQuestion = question;
          }
-         System.out.println("\nWhat color is " + chessBoard[question][0] + "? | WHITE = 1 | BLACK = 2 | SCORE = 3 | EXIT = 4 |");
+         //Check for repeated Questions
+         while(tempQuestion == question) {
+            if(questionType == 1) {
+                question = random.nextInt(64);
+            } else if(questionType == 2) {
+               question = random.nextInt(32);
+            } else if(questionType == 3) {
+               question = random.nextInt(32);
+               question = question + 32;
+            } else {
+               question = random.nextInt(64);
+            }
+         }
+         //Color Quiz
+         System.out.println("\nWhat color is **" + chessBoard[question][0] + "**? | WHITE = 1 | BLACK = 2 | SCORE = 3 | EXIT = 4 |");
          option = keyboard.nextInt();
+         String answerString = "";
          if(option == 1) {
             if ("White" == chessBoard[question][1]) {
-               System.out.println("\nCorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n");
+               answerString = "\nCorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n";
+               System.out.println(answerString);
+               finalAnswerString = finalAnswerString + "\n-----" + (numberOfQuestions + 1) + "------" + answerString + "-------------\n";
                correct++;
                numberOfQuestions++;
             } else {
-               System.out.println("\nIncorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n");
+               answerString = "\nIncorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n";
+               System.out.println(answerString);
+               finalAnswerString = finalAnswerString + "\n-----" + (numberOfQuestions + 1) + "------" + answerString + "------------\n";
                numberOfQuestions++;
             }
          } else if(option == 2) {
             if ("Black" == chessBoard[question][1]) {
-               System.out.println("\nCorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n");
+               answerString = "\nCorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n";
+               System.out.println(answerString);
+               finalAnswerString = finalAnswerString + "\n-----" + (numberOfQuestions + 1) + "------" + answerString + "------------\n";
                correct++;
                numberOfQuestions++;
             } else {
-               System.out.println("\nIncorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n");
+               answerString = "\nIncorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n";
+               System.out.println(answerString);
+               finalAnswerString = finalAnswerString + "\n-----" + (numberOfQuestions + 1) + "------" + answerString + "------------\n";
                numberOfQuestions++;
             }
          } else if(option == 3) {
             System.out.println("\nScore: "+ correct + "/" + numberOfQuestions + "\n");
          } else if(option == 4) {
-            System.out.println("\nKeep playing chess! See ya later!");
-            System.out.println("\nScore: "+ correct + "/" + numberOfQuestions + "\n");
+            //Exit Option
          } else {
             System.out.println("\nInvalid option.\n");
          }
          keyboard.nextLine();
       } while(option != 4);
+      System.out.println(finalAnswerString);
+      System.out.println("Great job! Keep playing chess! See ya later!");
+      System.out.println("\nScore: "+ correct + "/" + numberOfQuestions + "\n");
+      //long timeNow = date.getTime();
+      //System.out.println("Time: " + (timeStarted - timeNow) + "");
+      int exitOption = keyboard.nextInt();
+      if (exitOption > 0 && exitOption < 0) {
+         System.exit(0);
+      }
    }
 }
