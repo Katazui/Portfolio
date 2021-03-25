@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 public class ChessColorQuiz {
+
    public static void main(String[] args) throws Exception {  
       //Creating Chessboard Array
       String[][] chessBoard = new String[64][64];
@@ -11,74 +12,42 @@ public class ChessColorQuiz {
       for(int i = 0; i < 64; i++) {
          if ((i >= 0) && (i < 8)) {
             chessBoard[i][0] = "a" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "White";
-            } else {
-               chessBoard[i][1] = "Black";
-            }
+            chessBoard[i][1] = assignColor(0, number);
          }
          if ((i >= 8) && (i < 16)) {
             if(i == 8) { number = 1; }
             chessBoard[i][0] = "b" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "Black";
-            } else {
-               chessBoard[i][1] = "White";
-            }            
+            chessBoard[i][1] = assignColor(1, number);         
          }
          if ((i >= 16) && (i < 24)) {
             if(i == 16) { number = 1; }
             chessBoard[i][0] = "c" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "White";
-            } else {
-               chessBoard[i][1] = "Black";
-            }            
+            chessBoard[i][1] = assignColor(0, number);         
          }
          if ((i >= 24) && (i < 32)) {
             if(i == 24) { number = 1; }
             chessBoard[i][0] = "d" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "Black";
-            } else {
-               chessBoard[i][1] = "White";
-            }            
+            chessBoard[i][1] = assignColor(1, number);         
          }
          if ((i >= 32) && (i < 40)) {
             if(i == 32) { number = 1; }
             chessBoard[i][0] = "e" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "White";
-            } else {
-               chessBoard[i][1] = "Black";
-            }            
+            chessBoard[i][1] = assignColor(0, number);          
          }
          if ((i >= 40) && (i < 48)) {
             if(i == 40) { number = 1; }
             chessBoard[i][0] = "f" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "Black";
-            } else {
-               chessBoard[i][1] = "White";
-            }            
+            chessBoard[i][1] = assignColor(1, number);         
          }
          if ((i >= 48) && (i < 56)) {
             if(i == 48) { number = 1; }
             chessBoard[i][0] = "g" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "White";
-            } else {
-               chessBoard[i][1] = "Black";
-            }            
+            chessBoard[i][1] = assignColor(0, number);           
          }
          if ((i >= 56) && (i <= 64)) {
             if(i == 56) { number = 1; }
             chessBoard[i][0] = "h" + number;
-            if (number % 2 == 0) {
-               chessBoard[i][1] = "Black";
-            } else {
-               chessBoard[i][1] = "White";
-            }            
+            chessBoard[i][1] = assignColor(1, number);           
          }
          number++;
       }
@@ -102,6 +71,7 @@ public class ChessColorQuiz {
       int question;
       int questionLimit;
       int tempQuestion = -1; //To avoid repeated questions
+      String answerString = ""; 
       String finalAnswerString = "";
       Random random = new Random();
       /*
@@ -109,15 +79,15 @@ public class ChessColorQuiz {
       String incorrectSoundEffect = "/Incorrect.mp3";
       InputStream correctInput = new FileInputStream(correctSoundEffect);
       InputStream incorrectInput = new FileInputStream(incorrectSoundEffect);
+      Date date = new Date();
+      long timeStarted = date.getTime();
       */
       Scanner keyboard = new Scanner(System.in);
-      System.out.println("\nQuestion Limit? INFINITY = -1\n");
+      System.out.println("\nQuestion Limit? INFINITY <= 0\n");
       questionLimit = keyboard.nextInt();
       if (questionLimit == 0) { questionLimit = -1; }
       System.out.println("\nALL = 1 | TOP HALF = 2 | BOTTOM HALF = 3\n");
       int questionType = keyboard.nextInt();
-      Date date = new Date();
-      long timeStarted = date.getTime();
       do {
          if(questionLimit == numberOfQuestions) {
             break;
@@ -153,7 +123,6 @@ public class ChessColorQuiz {
          //Color Quiz
          System.out.println("\nWhat color is **" + chessBoard[question][0] + "**? | WHITE = 1 | BLACK = 2 | SCORE = 3 | EXIT = 4 |");
          option = keyboard.nextInt();
-         String answerString = "";
          if(option == 1) {
             if ("White" == chessBoard[question][1]) {
                answerString = "\nCorrect!\n" + chessBoard[question][0] + "-" + chessBoard[question][1] + "\n";
@@ -199,4 +168,22 @@ public class ChessColorQuiz {
          System.exit(0);
       }
    }
+
+   public static String assignColor(int color, int number) {
+      String colorString = "";
+      if(color == 0) {
+         if (number % 2 == 0) {
+            colorString = "White";
+         } else {
+            colorString = "Black";
+         }
+      } else {
+         if (number % 2 == 0) {
+            colorString = "Black";
+         } else {
+            colorString = "White";
+         }
+      }
+      return colorString;
+   }  
 }
