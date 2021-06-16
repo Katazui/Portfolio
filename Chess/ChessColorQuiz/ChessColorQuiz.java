@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 public class ChessColorQuiz {
-
    public static void main(String[] args) throws Exception {  
       //Creating Chessboard Array
       String[][] chessBoard = new String[64][64];
@@ -70,10 +69,12 @@ public class ChessColorQuiz {
       int numberOfQuestions = 0;
       int question;
       int questionLimit;
+      int questionType; //Users decide which squares to get quiz on
       int tempQuestion = -1; //To avoid repeated questions
       String answerString = ""; 
       String finalAnswerString = "";
       Random random = new Random();
+      Scanner keyboard = new Scanner(System.in);
       /*
       String correctSoundEffect = "/Correct.mp3";
       String incorrectSoundEffect = "/Incorrect.mp3";
@@ -82,12 +83,11 @@ public class ChessColorQuiz {
       Date date = new Date();
       long timeStarted = date.getTime();
       */
-      Scanner keyboard = new Scanner(System.in);
       System.out.println("\nQuestion Limit? INFINITY <= 0\n");
       questionLimit = keyboard.nextInt();
       if (questionLimit == 0) { questionLimit = -1; }
       System.out.println("\nALL = 1 | TOP HALF = 2 | BOTTOM HALF = 3\n");
-      int questionType = keyboard.nextInt();
+      questionType = keyboard.nextInt();
       do {
          if(questionLimit == numberOfQuestions) {
             break;
@@ -168,7 +168,6 @@ public class ChessColorQuiz {
          System.exit(0);
       }
    }
-
    public static String assignColor(int color, int number) {
       String colorString = "";
       if(color == 0) {
